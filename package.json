@@ -2,7 +2,7 @@
   "name": "nest-seed-boilerplate",
   "version": "0.0.0",
   "description": "description",
-  "author": "daniellarsen725@hotmail.com",
+  "author": "Daniel Larsen",
   "license": "MIT",
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
