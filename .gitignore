@@ -92,3 +92,6 @@ Thumbs.db
 
 # TypeORM
 ormconfig.json
+
+#Custom
+database/db.sqlite
