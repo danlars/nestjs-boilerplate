@@ -1,6 +1,9 @@
 import { IsNumberString } from 'class-validator';
+import { ApiModelProperty } from '@nestjs/swagger';
 
 export class HasValidId {
+
+  @ApiModelProperty()
   @IsNumberString()
-  userId: number;
+  readonly userId: number;
 }

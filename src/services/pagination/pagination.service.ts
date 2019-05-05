@@ -1,20 +1,17 @@
 import { PaginationInterface } from './pagination.interface';
-import { QueryParameters } from './query-parameters.interface';
-import { FindManyOptions, SelectQueryBuilder } from 'typeorm';
+import { IPaginationParameters } from './pagination-parameters.interface';
+import { SelectQueryBuilder } from 'typeorm';
 
 export class PaginationService {
-  static async paginate(entity: SelectQueryBuilder<any>, options: QueryParameters): Promise<PaginationInterface> {
-    const findManyOptions: FindManyOptions = {};
-    findManyOptions.take = options.page_size || 10;
-    findManyOptions.skip = options.page || 1;
+  static async paginate(entity: SelectQueryBuilder<any>, options: IPaginationParameters): Promise<PaginationInterface> {
     const [data, total] = await entity
-      .skip((findManyOptions.skip - 1) * findManyOptions.take)
-      .take(findManyOptions.take)
+      .skip((options.page - 1) * options.page_size)
+      .take(options.page)
       .getManyAndCount();
     return {
-      current_page: findManyOptions.skip,
-      last_page: Math.ceil(total / findManyOptions.take),
-      page_size: findManyOptions.take,
+      current_page: options.page,
+      last_page: Math.ceil(total / options.page_size),
+      page_size: options.page_size,
       total,
       data,
     };

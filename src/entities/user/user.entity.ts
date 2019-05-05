@@ -11,7 +11,12 @@ import {
 } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 
-@Entity({ name: 'users' })
+@Entity({
+  name: 'users', orderBy: {
+    id: 'ASC',
+    firstname: 'ASC',
+  },
+})
 export class UserEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;

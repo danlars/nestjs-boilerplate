@@ -1,20 +1,23 @@
-import { Body, Controller, Delete, Get, HttpStatus, Param, Patch, Post, Query, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpStatus, Param, Patch, Post, Query, Res, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { PaginationInterface } from '../../services/pagination/pagination.interface';
 import { HasValidId } from './validators/has-valid-id';
-import { UpdateUserValidator } from './validators/update-user-validator';
-import { CreateUserValidator } from './validators/create-user-validator';
+import { UpdateUser } from './validators/update-user';
+import { CreateUser } from './validators/create-user';
 import { UserService } from '../../services/user/user.service';
 import { UserEntity } from '../../entities/user/user.entity';
 import { DeleteResult } from 'typeorm';
 import { AuthGuard } from '@nestjs/passport';
-import { QueryParameters } from '../../services/pagination/query-parameters.interface';
+import { PaginationParameters } from '../../services/pagination/pagination-parameters';
+import { ApiUseTags } from '@nestjs/swagger';
 
+@ApiUseTags('Users')
 @Controller('users')
 @UseGuards(AuthGuard())
 export class UsersController {
   constructor(private readonly userService: UserService) {}
+  @UsePipes(new ValidationPipe({ transform: true }))
   @Get()
-  public async index(@Query() params: QueryParameters): Promise<PaginationInterface> {
+  public async index(@Query() params: PaginationParameters): Promise<PaginationInterface> {
     return this.userService.paginate(params);
   }
 
@@ -24,12 +27,12 @@ export class UsersController {
   }
 
   @Patch('/:userId')
-  public async update(@Param() params: HasValidId, @Body() userEntity: UpdateUserValidator): Promise<UserEntity> {
+  public async update(@Param() params: HasValidId, @Body() userEntity: UpdateUser): Promise<UserEntity> {
     return this.userService.update(params.userId, userEntity);
   }
 
   @Post()
-  public async create(@Body() userEntity: CreateUserValidator): Promise<UserEntity> {
+  public async create(@Body() userEntity: CreateUser): Promise<UserEntity> {
     return this.userService.create(userEntity);
   }
 

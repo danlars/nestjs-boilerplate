@@ -1,9 +1,12 @@
 import { IsEmail, IsString } from 'class-validator';
+import { ApiModelProperty } from '@nestjs/swagger';
 
-export class AuthValidator {
+export class Auth {
+  @ApiModelProperty()
   @IsEmail()
-  email: string;
+  readonly email: string;
 
+  @ApiModelProperty()
   @IsString()
-  password: string;
+  readonly password: string;
 }

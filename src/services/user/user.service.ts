@@ -6,7 +6,7 @@ import { PaginationService } from '../pagination/pagination.service';
 import { PaginationInterface } from '../pagination/pagination.interface';
 import { UserCreate } from './user-create.interface';
 import { UserUpdate } from './user-update.interface';
-import { QueryParameters } from '../pagination/query-parameters.interface';
+import { IPaginationParameters } from '../pagination/pagination-parameters.interface';
 
 @Injectable()
 export class UserService implements ServicesInterface {
@@ -41,9 +41,9 @@ export class UserService implements ServicesInterface {
     return UserEntity.delete(id);
   }
 
-  async paginate(options: QueryParameters): Promise<PaginationInterface> {
+  async paginate(options: IPaginationParameters): Promise<PaginationInterface> {
     const query = UserEntity.createQueryBuilder();
-    if (options.search && typeof options.search === 'string') {
+    if (options.search.length > 1) {
       const search = `%${options.search.toLowerCase()}%`;
       query.where((subQ: SelectQueryBuilder<UserEntity>) => {
         subQ.where(`LOWER(firstname) LIKE :search`, {search});

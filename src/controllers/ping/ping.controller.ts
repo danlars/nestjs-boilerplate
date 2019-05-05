@@ -1,5 +1,7 @@
 import { Controller, Get, HttpCode } from '@nestjs/common';
+import { ApiUseTags } from '@nestjs/swagger';
 
+@ApiUseTags('Ping')
 @Controller('ping')
 export class PingController {
   @Get()

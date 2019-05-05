@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import {UserService} from '../user/user.service';
 import { UserEntity } from '../../entities/user/user.entity';
-// @ts-ignore
-import * as cryptoRandomString from 'crypto-random-string';
+// tslint:disable-next-line:no-var-requires
+const cryptoRandomString = require('crypto-random-string');
 
 @Injectable()
 export class AuthService {
