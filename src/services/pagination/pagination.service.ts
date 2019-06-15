@@ -6,7 +6,7 @@ export class PaginationService {
   static async paginate(entity: SelectQueryBuilder<any>, options: IPaginationParameters): Promise<PaginationInterface> {
     const [data, total] = await entity
       .skip((options.page - 1) * options.page_size)
-      .take(options.page)
+      .take(options.page_size)
       .getManyAndCount();
     return {
       current_page: options.page,
