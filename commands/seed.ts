@@ -1,12 +1,13 @@
-import * as glob from 'glob';
 import chalk from 'chalk';
-import * as path from 'path';
 import { getConnectionOptions, createConnection, QueryRunner } from 'typeorm';
+import { Users } from '../database/seeds/users';
+
+const seedCollection: any[] = [
+  Users,
+];
 
 const run = async () => {
   let ormconfig;
-  const normalizePath = path.normalize(`database/seeds/*.ts`);
-  const seedFiles: string[] = glob.sync(normalizePath, {nodir: true});
   console.log(chalk.greenBright('Fetching TypeORM Connection'));
 
   try {
@@ -20,16 +21,15 @@ const run = async () => {
   const queryRunner: QueryRunner = connection.createQueryRunner();
 
   console.log(chalk.greenBright('Seeding files...'));
-  for (const seed of seedFiles) {
+  for (const seeder of seedCollection) {
     try {
-      console.log(`Seeding ${chalk.greenBright(seed)}...`);
-      const seedFile = require(`./../${seed}`);
-      await seedFile.seed(queryRunner);
+      console.log(`Seeding ${chalk.greenBright(seeder.name)}...`);
+      await seeder.seed(queryRunner);
       if (queryRunner.isTransactionActive) {
         await queryRunner.commitTransaction();
       }
     } catch (e) {
-      console.log(`Unable to seed ${chalk.redBright(seed)}`);
+      console.log(`Unable to seed ${chalk.redBright(seeder.name)}`);
       if (queryRunner.isTransactionActive) {
         await queryRunner.rollbackTransaction();
       }

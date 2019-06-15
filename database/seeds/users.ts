@@ -2,7 +2,7 @@ import * as faker from 'faker';
 import { QueryRunner } from 'typeorm';
 import { UserEntity } from '../../src/entities/user/user.entity';
 
-module.exports = class Users {
+export class Users {
   static async seed(query: QueryRunner) {
     const users = [];
     for (let i = 0; i < 200; i++) {
@@ -16,4 +16,4 @@ module.exports = class Users {
 
     await query.manager.save(users, {chunk: 500});
   }
-};
+}
