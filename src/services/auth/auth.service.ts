@@ -14,9 +14,9 @@ export class AuthService {
     return await this.usersService.findOneByToken(token);
   }
 
-  async signIn(user: UserEntity) {
+  async signIn(user: UserEntity): Promise<string> {
     const copiedUser: UserEntity = user;
-    copiedUser.rememberToken = cryptoRandomString(100);
+    copiedUser.rememberToken = cryptoRandomString({length: 100});
     delete copiedUser.password;
     await copiedUser.save();
     return copiedUser.rememberToken;

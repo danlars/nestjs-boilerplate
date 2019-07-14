@@ -15,4 +15,8 @@ describe('Ping Controller', () => {
   it('should be defined', () => {
     expect(controller).toBeDefined();
   });
+
+  it('Should return void when index is called', () => {
+    expect(controller.index()).toBeUndefined();
+  });
 });

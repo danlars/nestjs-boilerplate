@@ -10,7 +10,7 @@ export class PaginationService {
       .getManyAndCount();
     return {
       current_page: options.page,
-      last_page: Math.ceil(total / options.page_size),
+      last_page: Math.ceil(total / options.page_size) || 1,
       page_size: options.page_size,
       total,
       data,

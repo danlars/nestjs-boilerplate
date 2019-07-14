@@ -3,13 +3,14 @@ import { UserService } from './user/user.service';
 import { AuthService } from './auth/auth.service';
 import { PassportModule } from '@nestjs/passport';
 import { HttpService } from './strategy/http/http.service';
+const passportModule = PassportModule.register({ session: false, defaultStrategy: 'bearer' });
 
 @Module({
   imports: [
-    PassportModule.register({ session: false, defaultStrategy: 'bearer' }),
+    passportModule,
   ],
   providers: [UserService, AuthService, HttpService],
-  exports: [UserService, AuthService],
+  exports: [UserService, AuthService, passportModule],
 })
 export class ServicesModule {
 }

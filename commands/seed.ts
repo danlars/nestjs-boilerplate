@@ -8,7 +8,7 @@ const seedCollection: any[] = [
 
 const run = async () => {
   let ormconfig;
-  console.log(chalk.greenBright('Fetching TypeORM Connection'));
+  console.log(chalk.greenBright('Establishing TypeORM Connection'));
 
   try {
     ormconfig = await getConnectionOptions();

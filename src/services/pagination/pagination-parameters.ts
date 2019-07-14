@@ -2,8 +2,11 @@ import { IPaginationParameters } from './pagination-parameters.interface';
 import { ApiModelProperty } from '@nestjs/swagger';
 
 export class PaginationParameters implements IPaginationParameters {
+  // tslint:disable-next-line:variable-name
   private _page: number = 1;
+  // tslint:disable-next-line:variable-name
   private _page_size: number = 10;
+  // tslint:disable-next-line:variable-name
   private _search: string = '';
 
   @ApiModelProperty({required: false, readOnly: true})

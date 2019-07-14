@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ServicesInterface } from '../services.interface';
 import { UserEntity } from '../../entities/user/user.entity';
-import { DeleteResult, FindManyOptions, SelectQueryBuilder } from 'typeorm';
+import { DeleteResult, FindManyOptions, getConnection, SelectQueryBuilder } from 'typeorm';
 import { PaginationService } from '../pagination/pagination.service';
 import { PaginationInterface } from '../pagination/pagination.interface';
 import { UserCreate } from './user-create.interface';
@@ -19,11 +19,7 @@ export class UserService implements ServicesInterface {
   }
 
   async create(userCreate: UserCreate): Promise<UserEntity> {
-    const user = new UserEntity();
-    user.firstname = userCreate.firstname;
-    user.lastname = userCreate.lastname;
-    user.email = userCreate.email;
-    user.password = userCreate.password;
+    const user = UserEntity.create(userCreate);
     return user.save();
   }
 
@@ -52,7 +48,7 @@ export class UserService implements ServicesInterface {
       });
     }
 
-    return PaginationService.paginate(query, options);
+    return await PaginationService.paginate(query, options);
     }
 
     async findOneByEmail(email: string): Promise<UserEntity> {
