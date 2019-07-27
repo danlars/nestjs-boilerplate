@@ -1,30 +1,37 @@
 import { Injectable } from '@nestjs/common';
 import { ServicesInterface } from '../services.interface';
 import { UserEntity } from '../../entities/user/user.entity';
-import { DeleteResult, FindManyOptions, getConnection, SelectQueryBuilder } from 'typeorm';
+import { DeleteResult, FindManyOptions, Repository, SelectQueryBuilder } from 'typeorm';
 import { PaginationService } from '../pagination/pagination.service';
 import { PaginationInterface } from '../pagination/pagination.interface';
 import { UserCreate } from './user-create.interface';
 import { UserUpdate } from './user-update.interface';
 import { IPaginationParameters } from '../pagination/pagination-parameters.interface';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class UserService implements ServicesInterface {
+
+  constructor(
+    @InjectRepository(UserEntity) private readonly userRepo: Repository<UserEntity>,
+  ) {
+  }
+
   async getAll(options: FindManyOptions): Promise<UserEntity[]> {
-    return UserEntity.find(options);
+    return this.userRepo.find(options);
   }
 
   async get(id: number): Promise<UserEntity> {
-    return UserEntity.findOne(id);
+    return this.userRepo.findOne(id);
   }
 
   async create(userCreate: UserCreate): Promise<UserEntity> {
-    const user = UserEntity.create(userCreate);
+    const user = this.userRepo.create(userCreate);
     return user.save();
   }
 
   async update(id: number, userUpdate: UserUpdate): Promise<UserEntity> {
-    const user = await UserEntity.findOne(id);
+    const user = await this.userRepo.findOne(id);
     user.firstname = userUpdate.firstname;
     user.lastname = userUpdate.lastname;
     if (userUpdate.password) {
@@ -34,31 +41,29 @@ export class UserService implements ServicesInterface {
   }
 
   async destroy(id: number): Promise<DeleteResult> {
-    return UserEntity.delete(id);
+    return this.userRepo.delete(id);
   }
 
   async paginate(options: IPaginationParameters): Promise<PaginationInterface> {
-    const query = UserEntity.createQueryBuilder();
+    const query = this.userRepo.createQueryBuilder();
     if (options.search.length > 1) {
       const search = `%${options.search.toLowerCase()}%`;
-      query.where((subQ: SelectQueryBuilder<UserEntity>) => {
-        subQ.where(`LOWER(firstname) LIKE :search`, {search});
-        subQ.orWhere(`LOWER(lastname) LIKE :search`, {search});
-        subQ.orWhere(`LOWER(email) LIKE :search`, {search});
-      });
+      query.where(`LOWER(firstname) LIKE :search`, { search });
+      query.orWhere(`LOWER(lastname) LIKE :search`, { search });
+      query.orWhere(`LOWER(email) LIKE :search`, { search });
     }
 
     return await PaginationService.paginate(query, options);
-    }
-
-    async findOneByEmail(email: string): Promise<UserEntity> {
-      return UserEntity.findOne({
-        select: ['firstname', 'lastname', 'id', 'email', 'password', 'updated_at', 'created_at'],
-        where: { email },
-      });
-    }
-
-    async findOneByToken(token: string): Promise<UserEntity> {
-      return await UserEntity.findOne({ where: { rememberToken: token } });
-    }
   }
+
+  async findOneByEmail(email: string): Promise<UserEntity> {
+    return this.userRepo.findOne({
+      select: ['firstname', 'lastname', 'id', 'email', 'password', 'updated_at', 'created_at'],
+      where: { email },
+    });
+  }
+
+  async findOneByToken(token: string): Promise<UserEntity> {
+    return await this.userRepo.findOne({ where: { rememberToken: token } });
+  }
+}
