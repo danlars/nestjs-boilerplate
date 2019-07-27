@@ -46,6 +46,7 @@ describe('AuthController', () => {
       });
 
       expect(await controller.signIn(auth)).toEqual(expect.any(NotFoundException));
+      expect(spy).toHaveBeenCalledWith(auth.email);
       spy.mockClear();
     });
 
@@ -55,6 +56,7 @@ describe('AuthController', () => {
       });
 
       expect(await controller.signIn(auth)).toEqual(expect.any(UnprocessableEntityException));
+      expect(spy).toHaveBeenCalledWith(auth.email);
       spy.mockClear();
     });
 
@@ -69,6 +71,8 @@ describe('AuthController', () => {
       });
 
       expect(await controller.signIn(auth)).toBe(token);
+      expect(userSpy).toHaveBeenCalledWith(auth.email);
+      expect(authSpy).toHaveBeenCalledWith(user);
       userSpy.mockClear();
       authSpy.mockClear();
     });

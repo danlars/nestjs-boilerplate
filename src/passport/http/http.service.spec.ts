@@ -35,16 +35,13 @@ describe('HttpService', () => {
       const spy = jest.spyOn(authService, 'validateUser').mockImplementation(() => {
         return new Promise((resolve) => resolve(user));
       });
-      expect(service.validate('')).resolves.toStrictEqual(expect.any(UserEntity));
+      expect(await service.validate('')).toStrictEqual(expect.any(UserEntity));
+      expect(spy).toHaveBeenCalledWith('');
       spy.mockClear();
     });
 
     it('Should throw UnauthorizedException', async () => {
-      const spy = jest.spyOn(authService, 'validateUser').mockImplementation(() => {
-        return new Promise((resolve) => resolve(false));
-      });
       expect(service.validate('')).rejects.toThrow(UnauthorizedException);
-      spy.mockClear();
     });
   });
 });

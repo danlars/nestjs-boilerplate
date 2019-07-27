@@ -47,6 +47,7 @@ describe('AuthService', () => {
       });
 
       expect(await service.signIn(user)).toBeDefined();
+      expect(spy).toHaveBeenCalledTimes(1);
       spy.mockClear();
     });
   });
