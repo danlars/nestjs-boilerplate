@@ -31,6 +31,9 @@ export class MockUserEntity {
     return jest.fn(() => ({
       where: jest.fn().mockReturnThis(),
       orWhere: jest.fn().mockReturnThis(),
+      skip: jest.fn().mockReturnThis(),
+      take: jest.fn().mockReturnThis(),
+      getManyAndCount: jest.fn(() => [[], 0]),
     }))();
   }
 }
