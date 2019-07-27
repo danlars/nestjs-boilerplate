@@ -37,9 +37,8 @@ describe('Users Controller', () => {
   });
 
   describe('#index', () => {
-    it('should return pagination object from index', async () => {
-      const result = await controller.index(new PaginationParameters());
-      expect(result).toStrictEqual({
+    it('Should return PaginationInterface', async () => {
+      expect(await controller.index(new PaginationParameters())).toStrictEqual({
         page_size: 10,
         current_page: 1,
         data: [],
