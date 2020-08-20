@@ -28,7 +28,7 @@
     "@nestjs/platform-fastify": "^6.3.1",
     "@nestjs/swagger": "3.0.2",
     "@nestjs/typeorm": "6.1.2",
-    "bcrypt": "3.0.6",
+    "bcrypt": "5.0.0",
     "class-transformer": "0.2.3",
     "class-validator": "0.9.1",
     "crypto-random-string": "3.0.1",
